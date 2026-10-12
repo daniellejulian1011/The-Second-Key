@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#090911" />
+  <meta name="description" content="The Second Key — a playable 360° first-person psychological horror story set in Grayswick, Pennsylvania, 1990." />
+  <title>The Second Key — He Already Has a Way In</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="game.js" defer></script>
+</head>
+<body>
+  <div id="app">
+    <section id="main-menu" class="screen menu-screen" aria-label="Main menu">
+      <div id="cover-art" class="cover-art" role="img" aria-label="A rain-soaked suburban home under an ominous October sky"></div>
+      <div class="cover-dim"></div><div class="cover-rain" aria-hidden="true"></div>
+      <div class="menu-content">
+        <div class="menu-kicker">A GRAYSWICK STORY · PENNSYLVANIA · 1990</div>
+        <h1>THE <span>SECOND KEY</span></h1>
+        <p class="menu-tagline">HE ALREADY HAS A WAY IN.</p>
+        <div class="menu-rule"></div>
+        <nav class="menu-buttons" aria-label="Game menu">
+          <button class="ornate primary" data-menu="new">NEW GAME</button>
+          <button class="ornate" data-menu="continue">CONTINUE</button>
+          <button class="ornate" data-menu="chapters">CHAPTER SELECT</button>
+          <button class="ornate" data-menu="endings">ENDINGS</button>
+          <button class="ornate" data-menu="settings">SETTINGS</button>
+          <button class="ornate" data-menu="exit">EXIT</button>
+        </nav>
+      </div>
+      <button class="cover-hotspot" id="cover-door" style="left:43%;top:65%" aria-label="Open the front door to begin playing">✧ ENTER THE HOUSE</button>
+      <button class="cover-hotspot small" id="cover-window" style="left:55%;top:35%" aria-label="Inspect the upstairs window">◈</button>
+      <button class="cover-hotspot small" id="cover-mailbox" style="left:20%;top:60%" aria-label="Read the mailbox number">◈</button>
+      <p class="menu-footer">© THE SECOND KEY <span>FRIDAY · OCTOBER 26, 1990</span></p>
+      <div class="warning"><span>HEADPHONES RECOMMENDED</span> · SUDDEN SCARES · FLASHING LIGHTS (OPTIONAL)</div>
+    </section>
+
+    <main id="game-screen" class="screen hidden" aria-label="The Second Key gameplay">
+      <div id="viewport" role="application" tabindex="0" aria-label="360 degree first-person house exploration. Drag to look; W A S D to walk.">
+        <div id="panorama-layer" aria-hidden="true">
+          <img id="pano-a" class="pano" alt="" draggable="false" /><img id="pano-b" class="pano" alt="" draggable="false" /><img id="pano-c" class="pano" alt="" draggable="false" />
+        </div>
+        <div id="rain-layer" class="rain-layer" aria-hidden="true"></div>
+        <div id="actor-layer" aria-hidden="true"><img id="nathaniel-sprite" src="assets/nathaniel.svg" draggable="false" alt="" /></div>
+        <div id="hotspots"></div>
+        <div id="flashlight-cone" aria-hidden="true"></div>
+        <div id="darkness" aria-hidden="true"></div>
+        <div id="grain" aria-hidden="true"></div>
+        <div id="damage-vignette" aria-hidden="true"></div>
+        <div id="photo-flash" aria-hidden="true"></div>
+        <div id="lightning" aria-hidden="true"></div>
+        <div id="scare" aria-hidden="true"><img src="assets/nathaniel-close.svg" alt="" /></div>
+        <div id="crosshair" aria-hidden="true"><span></span></div>
+      </div>
+      <div class="hud top-left" id="place-hud"><div id="room-label">PRICE HOUSE — LIVING ROOM</div><div class="top-rule"></div><div id="clock-label">9:15 PM</div><div class="micro" id="chapter-label">CHAPTER I · A NORMAL FRIDAY</div></div>
+      <div class="hud top-right"><div class="eyebrow">OBJECTIVE</div><div id="objective-label">Enjoy the evening. Something feels wrong.</div><div class="threat-meter"><span id="threat-fill"></span></div><div class="micro" id="status-label">QUIET</div></div>
+      <button class="hud-button" id="pause-button" aria-label="Pause and settings">Ⅱ <span>PAUSE</span></button>
+      <button class="hud-button" id="map-button" aria-label="View the floor plan">▧ <span>MAP</span></button>
+      <button class="hud-button" id="journal-button" aria-label="Read evidence journal">▤ <span>JOURNAL</span></button>
+      <div class="dialogue-panel" id="dialogue-panel" aria-live="polite"><div class="speaker" id="speaker-name">EVELYN</div><p id="dialogue-text">It's just a quiet Friday night. The house feels a little too big.</p></div>
+      <div class="choice-panel" id="choice-panel" aria-label="Story choices"></div>
+      <div class="inventory-wrap"><div class="eyebrow">INVENTORY <span class="equip-note" id="equip-label">NO ITEM EQUIPPED</span></div><div class="inventory" id="inventory"></div></div>
+      <div class="help-strip" id="help-strip">DRAG TO LOOK · W A S D MOVE · SHIFT RUN · E INTERACT · 1–3 EQUIP · F FLASHLIGHT · C CAMERA · TAB MAP · ESC PAUSE</div>
+      <div class="movement-controls" id="movement-controls" aria-label="Touch movement controls"><button data-move="fwd" aria-label="Walk forward">▲</button><div><button data-move="left" aria-label="Strafe left">◀</button><button data-move="back" aria-label="Walk backward">▼</button><button data-move="right" aria-label="Strafe right">▶</button></div></div>
+      <button id="interact-button" class="action-button" aria-label="Interact with highlighted object">INTERACT <kbd>E</kbd></button>
+      <button id="camera-button" class="action-button hidden" aria-label="Photograph what you see">● TAKE PHOTO</button>
+      <div id="camera-overlay" class="hidden" aria-hidden="true"><div class="camera-focus"></div><span>35MM · PRICE · F/2.8</span><span id="film-label">FILM 06</span></div>
+      <div class="toast" id="toast" role="status"></div>
+    </main>
+
+    <section id="death-screen" class="screen overlay-screen hidden" aria-label="Game over"><div class="death-art"><img src="assets/nathaniel-close.svg" alt="Nathaniel looming in front of Evelyn" /></div><div class="death-red"></div><div class="death-content"><div class="overline">THE SECOND KEY · 1990</div><h2 id="death-heading">YOU WERE CAUGHT</h2><p id="death-description">Nathaniel found you. He won't let you leave again.</p><div class="stack-buttons"><button class="ornate red" id="retry-button">TRY AGAIN</button><button class="ornate" id="checkpoint-button">LOAD LAST CHECKPOINT</button><button class="ornate" id="death-menu-button">RETURN TO MAIN MENU</button></div></div></section>
+    <section id="ending-screen" class="screen overlay-screen hidden"><div class="ending-art"></div><div class="ending-content"><div class="overline">THE SECOND KEY · ENDING DISCOVERED</div><div id="ending-count">01 / 08</div><h2 id="ending-heading"></h2><p id="ending-description"></p><div class="stack-buttons"><button class="ornate primary" id="new-after-ending">PLAY AGAIN</button><button class="ornate" id="ending-menu-button">MAIN MENU</button></div></div></section>
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-scrim" id="modal-scrim"></div><div class="modal-box"><div class="modal-header"><h2 id="modal-title">SETTINGS</h2><button id="modal-close" aria-label="Close dialog">×</button></div><div id="modal-content"></div></div></div>
+    <div id="portrait-dialog" class="portrait-dialog hidden" role="dialog" aria-modal="true"><div class="portrait-back"></div><div class="portrait-text"><div class="overline">A VOICE IN THE DARK</div><h2 id="portrait-name">NATHANIEL</h2><p id="portrait-line"></p><button class="ornate primary" id="portrait-dismiss">CONTINUE</button></div><img src="assets/nathaniel-close.svg" alt="An illustration of Nathaniel Cross" /></div>
+  </div>
+</body>
+</html>
